@@ -1,0 +1,7 @@
+C:\Users\dclsi\Desktop\FXServer\server-data\resources\PhantomLearn\PhantomLearnServer\obj\Debug\PhantomLearnServer.csproj.CopyComplete
+C:\Users\dclsi\Desktop\FXServer\server-data\resources\PhantomLearn\PhantomLearnServer\obj\Debug\PhantomLearnServer.net.dll
+C:\Users\dclsi\Desktop\FXServer\server-data\resources\PhantomLearn\PhantomLearnServer\obj\Debug\PhantomLearnServer.net.pdb
+C:\Users\dclsi\Desktop\FXServer\server-data\resources\PhantomLearn\PhantomLearnServer.net.dll
+C:\Users\dclsi\Desktop\FXServer\server-data\resources\PhantomLearn\PhantomLearnServer.net.pdb
+C:\Users\dclsi\Desktop\FXServer\server-data\resources\PhantomLearn\PhantomLearnServer\obj\Debug\PhantomLearnServer.csproj.CoreCompileInputs.cache
+C:\Users\dclsi\Desktop\FXServer\server-data\resources\PhantomLearn\PhantomLearnServer\obj\Debug\PhantomLearnServer.csprojAssemblyReference.cache

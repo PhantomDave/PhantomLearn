@@ -1,0 +1,41 @@
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PhantomLearnClient.Copchase
+{
+
+    public class CopChaseClientMain : BaseScript
+    {
+        public CopChaseClientMain()
+        {
+            EventHandlers["plearn:CreateCopChaseCar"] += new Action<int, float, float, float, float, bool>(CreateCopChaseCar);
+        }   
+        private async void CreateCopChaseCar(int ply, float X, float Y, float Z, float A, bool IsCrimCar)
+        {
+            
+            if (IsCrimCar == false)
+            {
+                Vehicle Id = await World.CreateVehicle(2046537925, new Vector3(X, Y, Z), A);
+                Functions.SendClientMessage(0, 0, 255, "[CopChase]", "You are one of the ^2COPS^7, stop the fugitive at all cost!");
+                API.SetPedIntoVehicle(ply, Id.Handle, -1);
+                API.SetVehicleNumberPlateText(Id.Handle, "poLiSCe");
+                API.SetVehicleOnGroundProperly(Id.Handle);
+                API.SetPlayerControl(ply, false, 0);
+            }
+            else
+            {
+                Vehicle Id = await World.CreateVehicle(841808271, new Vector3(X, Y, Z), A);
+                Functions.SendClientMessage(155, 155, 0, "[CopChase]", "You are the ^1fugitive^7, RUN!");
+                API.SetPedIntoVehicle(ply, Id.Handle, -1);
+                API.SetVehicleNumberPlateText(Id.Handle, "FKPOLICE");
+                API.SetPlayerControl(ply, false, 0);
+                API.SetVehicleOnGroundProperly(Id.Handle);
+            }
+        }
+    }
+}
