@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using System;
 using System.Collections.Generic;
-using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
-
+using CitizenFX.Core.UI;
 
 namespace PhantomLearnClient.Commands
 {
@@ -11,10 +11,11 @@ namespace PhantomLearnClient.Commands
         public Client()
         {
             RegisterCommand("unfreeze",
-                new Action<int, List<object>, string>((source, args, raw) =>
+                new Action<int, List<object>, string>((source, args, raw) => 
                 {
                     SetPlayerControl(GetPlayerPed(-1), true, 0);
                 }), false);
+
             RegisterCommand("car", new Action<int, List<object>, string>(async (source, args, raw) =>
             {
                 string model;
@@ -41,8 +42,11 @@ namespace PhantomLearnClient.Commands
 
                 Game.PlayerPed.SetIntoVehicle(veh, VehicleSeat.Driver);
                 SetModelAsNoLongerNeeded(hash);
+
+                var name = Game.GetGXTEntry(model);
+
                 Functions.SendClientMessage(0, 255, 0, "[CarSpawner]",
-                    $"Good Choice, Enjoy your new {veh.DisplayName}");
+                    $"Good Choice, Enjoy your new {name}");
             }), false);
 
             RegisterCommand("gotocoords", new Action<int, List<object>, string>((source, args, raw) =>
@@ -103,6 +107,9 @@ namespace PhantomLearnClient.Commands
                 Functions.SendClientMessage(0, 0, 255, "[WantedLevel]", $"Wanted Level Set to {level}");
 
                 SetPlayerWantedLevel(source, level, false);
+                SetPlayerWantedLevelNow(source, false);
+
+
             }), false);
 
             RegisterCommand("save", new Action<int, List<object>, string>((source, args, raw) =>
@@ -116,12 +123,6 @@ namespace PhantomLearnClient.Commands
                 TriggerServerEvent("plearn:savecommand", GetPlayerName(source),
                     new Vector4(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z,
                         Game.PlayerPed.Heading), " " + args[0]);
-            }), false);
-
-            RegisterCommand("gotols", new Action<int, List<object>, string>((source, args, raw) =>
-            {
-                Game.PlayerPed.Position = new Vector3(93.56f, -1939.94f, 20.70f);
-                Functions.SendClientMessage(0, 144, 144, "[ServerCommands]", "You have been teleported to LS");
             }), false);
 
             RegisterCommand("wep", new Action<int, List<object>, string>((source, args, raw) =>

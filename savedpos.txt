@@ -1,7 +1,5 @@
-Phantom Dave, saved the position: Vector4: X:100,1886 Y:-1949,337 Z:20,44338 W:36,35664. //  // Police1
-Phantom Dave, saved the position: Vector4: X:98,82269 Y:-1940,976 Z:20,56043 W:36,36863. //  // police2
-Phantom Dave, saved the position: Vector4: X:104,3484 Y:-1934,545 Z:20,56008 W:56,46371. //  // police3
-Phantom Dave, saved the position: Vector4: X:114,3945 Y:-1938,217 Z:20,45716 W:66,25507. //  // police4
-Phantom Dave, saved the position: Vector4: X:104,3117 Y:-1940,572 Z:20,41029 W:46,99102. //  // police5
-Phantom Dave, saved the position: Vector4: X:110,886 Y:-1944,439 Z:20,38387 W:45,79087. //  // police6
-Phantom Dave, saved the position: Vector4: X:84,84459 Y:-1923,38 Z:20,60431 W:49,42601. //  // crim
+Phantom Dave, saved the position: Vector4: X: W:329,6021. //  LAX
+Phantom Dave, saved the position: Vector4: X: W:63,09478. //  SMB
+Phantom Dave, saved the position: Vector4: X: W:281,0764. //  SSA
+Phantom Dave, saved the position: Vector4: X:722,8278 Y:4165 Z:40,75159 W:175,5472. //  lake
+Phantom Dave, saved the position: Vector4: X: W:82,5416. //  chilliad

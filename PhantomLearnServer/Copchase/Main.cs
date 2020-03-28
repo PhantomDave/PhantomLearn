@@ -5,6 +5,7 @@ namespace PhantomLearnServer.Copchase
 {
     public class Main : BaseScript
     {
+        public static List<string> CChaseList = new List<string>();
         public class CopChase
         {
             public static bool Joinable { get; set; }
@@ -17,29 +18,37 @@ namespace PhantomLearnServer.Copchase
         {
             TriggerClientEvent("plearn:SendClientMessage", 0, 255, 0, "[CopChase]",
                 "The copchase will start in 30 seconds!");
-
-            for (var i = 10; i > 0; i--)
+          
+            var i = 30;
+            while(i != 0)
             {
                 await Delay(1000);
                 TriggerClientEvent("plearn:sendNotification", $"The copchase will start in {i} seconds!");
 
-                if (i == 5)
+                if (i == 5 && CChaseList.Count > 0)
                 {
                     CopChase.Joinable = true;
                     CopChase.Started = false;
                     CopChasePrestart();
                 }
-            }
+                else if(CChaseList.Count < 2)
+                {
+                    TriggerClientEvent("plearn:SendClientMessage", 255, 0, 0, "[CopChase]",
+                        "The Copchase didin't start because there weren't enough players!");
+                    return;
+                }
 
+                i--;
+            }
             StartCopChase();
         }
 
         private static void StartCopChase()
         {
             CopChase.Started = true;
-            CopChase.CopsInChase = PhantomLearnServer.Main.CChaseList.Count - 1;
+            CopChase.CopsInChase = CChaseList.Count - 1;
             CopChase.TimeRemaning = 10;
-            foreach (var i in PhantomLearnServer.Main.CChaseList)
+            foreach (var i in CChaseList)
             {
                 TriggerClientEvent("plearn:startCopChase", i);
                 TriggerClientEvent("plearn:sendNotification", "The Copchase started now!");
@@ -48,13 +57,13 @@ namespace PhantomLearnServer.Copchase
 
         private static void CopChasePrestart()
         {
-            for (var i = 0; i < PhantomLearnServer.Main.CChaseList.Count; i++)
+            for (var i = 0; i < CChaseList.Count; i++)
             {
-                TriggerClientEvent("plearn:CreateCopChaseCar", PhantomLearnServer.Main.CChaseList[i],
+                TriggerClientEvent("plearn:CreateCopChaseCar", CChaseList[i],
                     CopChaseVehicles[i].X, CopChaseVehicles[i].Y, CopChaseVehicles[i].Z, CopChaseVehicles[i].W, false);
 
-                if (i == PhantomLearnServer.Main.CChaseList.Count - 1)
-                    TriggerClientEvent("plearn:CreateCopChaseCar", PhantomLearnServer.Main.CChaseList[i],
+                if (i == CChaseList.Count - 1)
+                    TriggerClientEvent("plearn:CreateCopChaseCar", CChaseList[i],
                         CopChaseVehicles[6].X, CopChaseVehicles[6].Y, CopChaseVehicles[6].Z, CopChaseVehicles[6].W,
                         true);
             }

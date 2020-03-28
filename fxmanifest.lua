@@ -1,5 +1,9 @@
 games { 'gta5' }
 
+files {
+ "NativeUI.dll"
+}
+
 client_script 'PhantomLearnClient.net.dll'
 
 

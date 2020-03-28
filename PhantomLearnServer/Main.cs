@@ -8,7 +8,7 @@ namespace PhantomLearnServer
     public class Main : BaseScript
     {
         public static List<Player> PList = new List<Player>();
-        public static List<int> CChaseList = new List<int>();
+
         public Main()
         {
             //DateBase.Init();

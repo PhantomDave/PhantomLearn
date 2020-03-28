@@ -1,9 +1,8 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.IO;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 
 namespace PhantomLearnServer.Events
 {
@@ -16,76 +15,6 @@ namespace PhantomLearnServer.Events
             EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
             EventHandlers["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
             EventHandlers["plearn:log"] += new Action<string>(OnClientLogs);
-            EventHandlers["plearn:savecommand"] += new Action<string, Vector4, string>(OnSaveCommand);
-            EventHandlers["plearn:joincopchase"] += new Action<Player, int>(OnCopChaseJoin);
-        }
-
-        private static void OnCopChaseJoin([FromSource] Player ply, int id)
-        {
-
-
-            if (Main.CChaseList.Contains((id)))
-            {
-                Main.CChaseList.Remove(id);
-
-                TriggerClientEvent("plearn:SendClientMessage", 0, 255, 0, "[CopChase]",
-                    $"{ply.Name} left the Copchase {Main.CChaseList.Count}/7");
-                return;
-            }
-
-
-
-            if (Main.CChaseList.Count < 7 && Copchase.Main.CopChase.Started == false)
-            {
-                Main.CChaseList.Add(id);
-
-                TriggerClientEvent("plearn:SendClientMessage", 0, 255, 0, "[CopChase]",
-                    $"{ply.Name} joined the copchase! {Main.CChaseList.Count}/7");
-            }
-            else
-            {
-                TriggerClientEvent("plearn:SendClientMessage", 0, 255, 0, "[CopChase]",
-                    "The Copchase is full, wait the next one!");
-            }
-
-            if (Main.CChaseList.Count == 2) Copchase.Main.StartCopchaseCountdown();
-        }
-
-        private static void OnSaveCommand(string sender, Vector4 pos, string comment)
-        {
-            var path = API.GetResourcePath(API.GetCurrentResourceName()) + "\\savedpos.txt";
-
-            if (File.Exists(path))
-            {
-                Main.Log("File Exists!");
-            }
-            else if (!File.Exists(path))
-            {
-                Main.Log($"Dosen't Exists {path}!");
-                try
-                {
-                    File.Create(path);
-                }
-                catch (Exception ex)
-                {
-                    Main.Log($"{ex.Message}");
-                    return;
-                }
-
-                Main.Log($"Il file è stato creato {path}!");
-            }
-
-            try
-            {
-                using (var sw = new StreamWriter(path, true))
-                {
-                    sw.WriteLine($"{sender}, saved the position: Vector4: {pos}. // {comment}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Main.Log($"{ex.Message}");
-            }
         }
 
         private static void OnClientLogs(string text)
@@ -122,7 +51,6 @@ namespace PhantomLearnServer.Events
 
         private static void OnPlayerDied([FromSource] Player ply, int killerType, List<dynamic> deathcords)
         {
-            //Vector3 coords = new Vector3((float)deathcords[0], (float)deathcords[1], (float)deathcords[2]);
             TriggerClientEvent("plearn:sendNotification", $"{ply.Name} died alone, by himself, how sad.");
         }
 
@@ -136,20 +64,34 @@ namespace PhantomLearnServer.Events
 
             foreach (var data in deathData)
             {
-                if (data.Key == "killertype") killertype = (int) data.Value;
-                if (data.Key == "weaponHash") weaponhash = (uint) data.Value;
-                if (data.Key == "killerInVeh") isinVeh = (bool) data.Value;
-                if (data.Key == "killerpos") deathCoords = data.Value as List<dynamic>;
-                if (isinVeh)
-                    if (data.Key == "killerVehName")
-                        killedfrom = (string) data.Value;
+                switch (data.Key)
+                {
+                    case "killertype":
+                        killertype = (int) data.Value;
+                        break;
+                    case "weaponHash":
+                        weaponhash = (uint) data.Value;
+                        break;
+                    case "killerInVeh":
+                        isinVeh = (bool) data.Value;
+                        break;
+                    case "killerpos":
+                        deathCoords = data.Value as List<dynamic>;
+                        break;
+                }
+
+                if (!isinVeh) continue;
+                if (data.Key == "killerVehName")
+                    killedfrom = (string) data.Value;
             }
 
             var deathcoords = new Vector3((float) deathCoords[0], (float) deathCoords[1], (float) deathCoords[2]);
 
             var killer = API.GetPlayerFromIndex(killerid);
             TriggerClientEvent("plearn:sendNotification",
-                $"{ply.Name} was killed by {killer} someone at {deathcoords}.");
+                killer != null
+                    ? (string) $"{ply.Name} was killed by {killer} someone at {deathcoords}."
+                    : (string) $"{ply.Name} was killed by someone at {deathcoords}.");
         }
     }
 }
